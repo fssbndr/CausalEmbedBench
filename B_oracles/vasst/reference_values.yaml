@@ -1,0 +1,111 @@
+# VASST 2008 Reference Values
+# Russell, J.A., Walley, K.R., Singer, J., et al.
+# "Vasopressin versus norepinephrine infusion in the treatment of septic shock."
+# New England Journal of Medicine, 358(9):877–887 (2008)
+# DOI: https://doi.org/10.1056/NEJMoa067373
+
+source: "VASST 2008 (Russell, J.A., et al.)"
+doi: "10.1056/NEJMoa067373"
+extraction_date: "2026-06-23"
+
+# Primary outcome analysis (28-day mortality)
+# NEJM 358(9), Results section, p.879
+primary_effect:
+  n_vasopressin: 396
+  n_norepinephrine: 382
+  n_total: 778
+
+  # Mortality rates: "35.4% and 39.3%, respectively"
+  mortality_vasopressin_pct: 35.4
+  mortality_norepinephrine_pct: 39.3
+
+  # Absolute risk reduction (vasopressin vs norepinephrine, negative = mortality reduction)
+  ard_observed: -0.039  # Computed: 0.354 - 0.393 = -3.9 pp (vasopressin reduces mortality)
+  ard_ci_lower: -0.107  # "95% confidence interval [CI] for absolute risk reduction, −10.7% to 2.9%"
+  ard_ci_upper: 0.029  # Note: CI includes zero, hence P=0.26 (not significant)
+
+  # Adjusted logistic regression
+  # "odds ratio for death in the vasopressin group at 28 days, 0.88 [95% CI, 0.62 to 1.26]"
+  or_adjusted: 0.88
+  or_ci_lower: 0.62
+  or_ci_upper: 1.26
+
+  p_value: 0.26
+  test: "multivariate logistic regression"
+
+# Post-hoc subgroup analyses (NEJM Supplementary Appendix, Table 3)
+# "Two of the interaction analyses...yielded moderately significant P values (P = 0.04 for both)"
+
+subgroups:
+  lactate_quartile:
+    interaction_p_value: 0.04
+    interaction_note: "stratification according to quartile of lactate level"
+
+    q1_low:
+      label: "First lactate quartile (≤1.4 mmol/L)"
+      vasopressin_mortality_pct: 18.9
+      norepinephrine_mortality_pct: 33.8
+      ard: -0.149  # Computed: 0.189 - 0.338
+      n_vasopressin: 90
+      n_norepinephrine: 77
+
+    q2:
+      label: "Second lactate quartile (1.5–2.3 mmol/L)"
+      vasopressin_mortality_pct: 41.2
+      norepinephrine_mortality_pct: 41.4
+      ard: -0.002  # Computed: 0.412 - 0.414
+      n_vasopressin: 85
+      n_norepinephrine: 87
+
+    q3:
+      label: "Third lactate quartile (2.4–4.4 mmol/L)"
+      vasopressin_mortality_pct: 36.5
+      norepinephrine_mortality_pct: 39.0
+      ard: -0.025  # Computed: 0.365 - 0.390
+      n_vasopressin: 85
+      n_norepinephrine: 77
+
+    q4_high:
+      label: "Fourth lactate quartile (>4.4 mmol/L)"
+      vasopressin_mortality_pct: 61.3
+      norepinephrine_mortality_pct: 56.6
+      ard: 0.047  # Computed: 0.613 - 0.566
+      n_vasopressin: 80
+      n_norepinephrine: 83
+
+  vasopressor_count:
+    interaction_p_value: 0.04
+    interaction_note: "stratification according to number of vasopressors at baseline"
+
+    one_agent:
+      label: "One vasopressor"
+      vasopressin_mortality_pct: 31.3
+      norepinephrine_mortality_pct: 39.9
+      ard: -0.086  # Computed: 0.313 - 0.399
+      n_vasopressin: 272
+      n_norepinephrine: 271
+
+    two_plus_agents:
+      label: "Two or more vasopressors"
+      vasopressin_mortality_pct: 44.4
+      norepinephrine_mortality_pct: 37.8
+      ard: 0.066  # Computed: 0.444 - 0.378
+      n_vasopressin: 124
+      n_norepinephrine: 111
+
+# Baseline characteristics (for sanity checks)
+# NEJM 358(9), Table 1, p.878
+baseline_characteristics:
+  age_years: 60.5  # Mean ± SD varies by severity stratum, ~60.5
+  sofa_score: 25.3  # Less severe; 28.7 more severe
+  serum_lactate_mmol_per_L: 2.4  # Less severe; 4.3 more severe (median split point ~3.35)
+  apache_ii_score: 26.0  # Overall mean across strata
+
+# Validation notes
+validation:
+  primary_outcome: "28-day all-cause mortality"
+  definition_early_treatment: "vasopressin infusion"
+  definition_control: "norepinephrine infusion only"
+  study_design: "multicenter, randomized, controlled trial"
+  landmark_time: "time of enrollment in septic shock"
+  follow_up_window: "28 days"

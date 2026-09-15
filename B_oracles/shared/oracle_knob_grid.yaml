@@ -1,0 +1,103 @@
+# Named oracle-knob presets (B_oracles/shared/knobs.py). All knobs default to 1.0 = identity
+# (today's oracle output, unchanged).
+#
+# One preset per non-baseline sweep point (baseline + hard/easy pair per bidirectional
+# knob, single direction for alpha_alignment which is bounded [0,1] with 1.0 a structural
+# ceiling — no "beyond baseline" direction exists), plus one combined worst-case stress
+# test. Not every knob applies to every trial (see each oracle.py's "active_knobs" in its
+# causal_params.json output).
+
+# Reference point.
+baseline:
+  kappa_overlap: 1.0
+  gamma_hetero: 1.0
+  xi_effect: 1.0
+  eta_noise: 1.0
+  alpha_alignment: 1.0
+
+# Propensity pulled toward 0.5 relative to the fitted data -- better overlap than reality.
+high_overlap:
+  kappa_overlap: 0.5
+  gamma_hetero: 1.0
+  xi_effect: 1.0
+  eta_noise: 1.0
+  alpha_alignment: 1.0
+
+# Propensity pushed further from 0.5 than the fitted data -- worse overlap/positivity than
+# reality.
+low_overlap:
+  kappa_overlap: 3.0
+  gamma_hetero: 1.0
+  xi_effect: 1.0
+  eta_noise: 1.0
+  alpha_alignment: 1.0
+
+# Dampened CATE spread toward the constant ATE -- low heterogeneity signal, and a stress
+# test for embeddings hallucinating spurious structure when little true signal exists.
+low_heterogeneity:
+  kappa_overlap: 1.0
+  gamma_hetero: 0.5
+  xi_effect: 1.0
+  eta_noise: 1.0
+  alpha_alignment: 1.0
+
+# Small treatment-effect magnitude -- true signal is small relative to noise.
+weak_effect:
+  kappa_overlap: 1.0
+  gamma_hetero: 1.0
+  xi_effect: 0.3333333333333333
+  eta_noise: 1.0
+  alpha_alignment: 1.0
+
+# Large treatment-effect magnitude -- effects should be trivially detectable.
+amplified_effect:
+  kappa_overlap: 1.0
+  gamma_hetero: 1.0
+  xi_effect: 2.0
+  eta_noise: 1.0
+  alpha_alignment: 1.0
+
+# Reduced outcome residual variance -- quieter than the fitted data. Continuous-outcome
+# trials only.
+low_noise:
+  kappa_overlap: 1.0
+  gamma_hetero: 1.0
+  xi_effect: 1.0
+  eta_noise: 0.25
+  alpha_alignment: 1.0
+
+# Increased outcome residual variance -- tests robustness of embeddings/estimators.
+# Continuous-outcome trials only.
+high_noise:
+  kappa_overlap: 1.0
+  gamma_hetero: 1.0
+  xi_effect: 1.0
+  eta_noise: 1.25
+  alpha_alignment: 1.0
+
+# Fully disjoint propensity/outcome covariate sets -- zero true confounders (only
+# instruments and prognostic factors). Embeddings should need to preserve two
+# non-overlapping signal subspaces, not one.
+no_alignment:
+  kappa_overlap: 1.0
+  gamma_hetero: 1.0
+  xi_effect: 1.0
+  eta_noise: 1.0
+  alpha_alignment: 0.0
+
+# Half of covariates jointly informative to both models.
+partial_alignment:
+  kappa_overlap: 1.0
+  gamma_hetero: 1.0
+  xi_effect: 1.0
+  eta_noise: 1.0
+  alpha_alignment: 0.5
+
+# Combined worst case: weak overlap, low heterogeneity, weak effect, high noise, and no
+# true confounders, all at once.
+stress_all:
+  kappa_overlap: 3.0
+  gamma_hetero: 0.5
+  xi_effect: 0.3333333333333333
+  eta_noise: 1.25
+  alpha_alignment: 0.0
